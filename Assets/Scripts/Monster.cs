@@ -10,19 +10,28 @@ public class Monster : MonoBehaviour
 
     [SerializeField] int attackPower; // 공격력
 
-    [SerializeField] TextMeshProUGUI moster_Name; // 화면상에 나오는 몬스터 이름
-    
+    [SerializeField] TextMeshProUGUI moster_HP; // 화면상에 나오는 몬스터의 체력
 
     private void Start()
     {
         
     }
-
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Update()
     {
-        if (collision.CompareTag("FireSkill_1"))
+        moster_HP.text = ("남은 체력" + current_HP);
+    }
+
+    public void takeDMG(int damage)
+    {
+        current_HP -= damage;
+        if(current_HP <= 0)
         {
-            PlayerStatManager.instance.attackPower -= current_HP;
+            Die();
         }
     }
+    private void Die()
+    {
+
+    }
+    
 }
