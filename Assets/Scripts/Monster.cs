@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 public class Monster : MonoBehaviour
@@ -13,6 +14,7 @@ public class Monster : MonoBehaviour
 
     [SerializeField] TextMeshProUGUI moster_HP; // 화면상에 나오는 몬스터의 체력
 
+    bool isray = false;
 
     [Header("레이케스트")]
     [SerializeField] float layLineSize;
@@ -24,17 +26,26 @@ public class Monster : MonoBehaviour
     }
     private void Update()
     {
+        Move();
+   
+        Debug.DrawRay(transform.position, Vector3.left, Color.red);
         moster_HP.text = ("남은 체력" + current_HP);
-        if (isPlayer())
-        {
-            transform.Translate(transform.right * -speed * Time.deltaTime);
-        }
-    }
-    private bool isPlayer()
-    {
-        return Physics2D.Raycast(transform.position, transform.right * -1 * layLineSize, isLayer);
     }
 
+    void Move()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector3.left, 3, LayerMask.GetMask("Player"));
+
+        if (hit.collider != null)
+        {
+            isray = true;
+
+        }
+        if (!isray)
+        {
+            transform.Translate(-transform.right * speed * Time.deltaTime);
+        }
+    }
     public void takeDMG(int damage)
     {
         current_HP -= damage;
@@ -48,4 +59,5 @@ public class Monster : MonoBehaviour
 
     }
     
+  
 }
